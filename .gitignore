@@ -106,3 +106,6 @@ ENV/
 .idea/modules.xml
 .idea/workspace.xml
 experiments/
+
+#csv
+*.csv
