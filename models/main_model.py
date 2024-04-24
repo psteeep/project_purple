@@ -6,6 +6,10 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
+import json
+
+with open('../configs/config.json') as jf:
+    cfg = json.load(jf)
 
 # Initialize DataProcessor with the file path
 data_processor = DataProcessor('C:/git/project_purple/data_loader/data sets/main.csv')
@@ -60,7 +64,8 @@ optimized_model.add(Dense(units=1))
 optimized_model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae'])
 
 # Train the model with fewer epochs
-history = optimized_model.fit(X_train, y_train, epochs=3, batch_size=32, validation_split=0.1)
+history = optimized_model.fit(X_train, y_train, epochs=cfg['num_epochs'], batch_size=cfg['batch_size'],
+                              validation_split=0.1)
 
 # Predict with LSTM model
 predictions = optimized_model.predict(X_test)
