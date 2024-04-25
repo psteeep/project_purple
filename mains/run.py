@@ -1,7 +1,6 @@
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
-from base.base_model import BaseModel
-
+import json
 
 class LSTMModel(BaseModel):
     def build_model(self):

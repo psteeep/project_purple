@@ -1,30 +1,28 @@
-import pandas as pd
+import math
+import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
+
 
 class DataProcessor:
     def __init__(self, file_path):
-        self.data = None
         self.file_path = file_path
 
     def load_data(self):
-        self.data = pd.read_csv(self.file_path)
-        return self.data
+        # Load your data here
+        pass
 
-    def miss_data(self):
-        numeric_columns = self.data.select_dtypes(include='number').columns
-        self.data[numeric_columns] = self.data[numeric_columns].fillna(self.data[numeric_columns].mean())
-        return self.data
+    def preprocess_data(self, data):
+        close = data['Close'].values.reshape(-1, 1)
+        scaler = MinMaxScaler()
+        scaled_data = scaler.fit_transform(close)
+        return scaled_data
 
-    def process_data(self):
-        self.data = self.miss_data()  # Handle missing values
-        scaler = MinMaxScaler(feature_range=(0, 1))
-        self.data[['open', 'high', 'low', 'Volume BTC']] = scaler.fit_transform(self.data[['open', 'high', 'low', 'Volume BTC']])
-        self.data['close'] = scaler.fit_transform(self.data['close'].values.reshape(-1, 1))
-        return self.data
-
-    def split_data(self, test_size=0.2, random_state=42):
-        X = self.data[['open', 'high', 'low', 'Volume BTC']].values
-        y = self.data['close'].values
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
-        return X_train, X_test, y_train, y_test
+    def prepare_train_data(self, scaled_data):
+        X_train = []
+        y_train = []
+        for i in range(60, len(scaled_data)):
+            X_train.append(scaled_data[i - 60:i, 0])
+            y_train.append(scaled_data[i, 0])
+        X_train, y_train = np.array(X_train), np.array(y_train)
+        X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+        return X_train, y_train
