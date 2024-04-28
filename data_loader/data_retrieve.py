@@ -1,6 +1,6 @@
-import math
-import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+import pandas as pd
 
 
 class DataProcessor:
@@ -8,13 +8,13 @@ class DataProcessor:
         self.file_path = file_path
 
     def load_data(self):
-        # Load your data here
-        pass
+        data = pd.read_csv(self.file_path)
+        return data
 
     def preprocess_data(self, data):
         close = data['Close'].values.reshape(-1, 1)
-        scaler = MinMaxScaler()
-        scaled_data = scaler.fit_transform(close)
+        self.scaler = MinMaxScaler()
+        scaled_data = self.scaler.fit_transform(close)
         return scaled_data
 
     def prepare_train_data(self, scaled_data):
@@ -25,4 +25,4 @@ class DataProcessor:
             y_train.append(scaled_data[i, 0])
         X_train, y_train = np.array(X_train), np.array(y_train)
         X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
-        return X_train, y_train
+        return X_train, y_train, self.scaler

@@ -5,5 +5,12 @@
   "learning_rate": 0.001,
   "batch_size": 32,
   "state_size": [784],
-  "max_to_keep":5
+  "max_to_keep":5,
+  "input_shape": [60, 1],
+  "optimizer": "adam",
+  "loss": "mean_squared_error",
+  "metrics": ["accuracy"],
+  "num_epochs": 3,
+  "batch_size": 64,
+  "validation_split": 0.2
 }

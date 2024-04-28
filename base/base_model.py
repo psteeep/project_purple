@@ -10,5 +10,5 @@ class BaseModel(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def save_model(self, file_path):
+    def save_model(self, f="my_model.h5"):
         pass
