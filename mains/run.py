@@ -1,17 +1,50 @@
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout
 import json
+import matplotlib.pyplot as plt
+import pandas as pd
+from data_loader.data_retrieve import DataProcessor
+from models.main_model import LSTMModel
+from trainers.bit_price_train import LSTMTrain
 
-class LSTMModel(BaseModel):
-    def build_model(self):
-        model = Sequential()
-        model.add(LSTM(units=50, return_sequences=True, input_shape=(self.config['input_shape'], 1)))
-        model.add(Dropout(0.2))
-        model.add(LSTM(units=100, return_sequences=False))
-        model.add(Dropout(0.2))
-        model.add(Dense(units=50))
-        model.add(Dense(units=1))
-        return model
 
-    def save_model(self, file_path):
-        self.model.save(file_path)
+def main():
+    try:
+        with open('../configs/config.json') as jf:
+            cfg = json.load(jf)
+
+        data_processor = DataProcessor('C:/git/project_purple/data_loader/data sets/main.csv')
+        data = data_processor.load_data()
+        scaled_data = data_processor.preprocess_data(data)
+        X_train, y_train = data_processor.prepare_train_data(scaled_data)
+
+        # Initialize model
+        lstm_model = LSTMModel(cfg)
+        lstm_train = LSTMTrain(lstm_model.model, X_train, y_train)
+
+        # Train the model
+        lstm_train.train()
+
+        # Save the model
+        model_file_path = 'lstm_model.pkl'
+        lstm_model.save_model(model_file_path)
+
+        predictions = lstm_model.model.predict(X_test)
+        predictions = scaler.inverse_transform(predictions)
+
+        train = close[:train_close_len]
+        valid = pd.DataFrame(close[train_close_len:], columns=['Close'])  # Convert to DataFrame
+        valid["Predictions"] = predictions.flatten()  # Flatten predictions to match shape
+    except Exception as e:
+        print("Error: ", e)
+    # Visualize the data
+    plt.figure(figsize=(16, 8))
+    plt.title("LSTM Model")
+    plt.xlabel("Time", fontsize=14)
+    plt.ylabel("USDT", fontsize=14)
+    plt.plot(data["Close Time"][:train_close_len], train)
+    plt.plot(data["Close Time"][train_close_len:], valid[["Close", "Predictions"]])
+    plt.legend(["Train", "Validation", "Predictions"], loc="lower right")
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
