@@ -6,17 +6,17 @@ This project aims to predict financial time series using LSTM neural networks. I
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your_username/financial-time-series-prediction.git
+    git clone https://github.com/psteeep/project_purple.git
     ```
 
-2. **Navigate to the project directory:**
-    ```bash
-    cd financial-time-series-prediction
-    ```
+## Docker
 
-3. **Install the required Python packages:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+You can also run the project using Docker. First, build the Docker image:
 
-
+```bash
+docker build -t bitcoin-prediction .
+```
+than run
+```
+docker run -p 8000:8000 financial-prediction
+```
