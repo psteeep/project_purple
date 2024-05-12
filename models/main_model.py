@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 from base.base_model import BaseModel
+import pickle
 
 import json
 
@@ -21,8 +22,9 @@ class LSTMModel(BaseModel):
         model.add(Dropout(0.2))
         model.add(Dense(units=50))
         model.add(Dense(units=1))
-        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.compile(optimizer='adam', loss='mean_squared_error')  # Use 'mean_squared_error' here
         return model
 
-    def save_model(self, f="my_model.h5"):
-        self.model.save(f)
+    def save_model(self, f="my_model.pkl"):
+        with open(f, 'wb') as model_file:
+            pickle.dump(self.model, model_file)

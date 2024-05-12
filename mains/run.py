@@ -23,6 +23,9 @@ def main():
         lstm_train = LSTMTrain(lstm_model.model, X_train, y_train, cfg)
         lstm_train.train()
 
+        # Save the model
+        lstm_model.save_model("lstm_model.pkl")
+
         # Predicting the test set
         predictions = lstm_model.model.predict(X_test)
         predictions = scaler.inverse_transform(predictions)
