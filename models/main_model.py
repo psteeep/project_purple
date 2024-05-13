@@ -1,20 +1,16 @@
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 from base.base_model import BaseModel
-import pickle
-
 import json
 
 
 class LSTMModel(BaseModel):
-    def __init__(self, config_path):
-        with open('../configs/config.json', 'r') as config_file:
-            self.config = json.load(config_file)
+    def __init__(self, config):
+        self.config = config
         self.model = self.build_model()
 
     def build_model(self):
         model = Sequential()
-        # Assuming input_shape is something like (60, 1) where 60 is time_steps and 1 is the feature count
         model.add(LSTM(units=50, return_sequences=True,
                        input_shape=(self.config['input_shape'][0], self.config['input_shape'][1])))
         model.add(Dropout(0.2))
@@ -22,9 +18,8 @@ class LSTMModel(BaseModel):
         model.add(Dropout(0.2))
         model.add(Dense(units=50))
         model.add(Dense(units=1))
-        model.compile(optimizer='adam', loss='mean_squared_error')  # Use 'mean_squared_error' here
+        model.compile(optimizer='adam', loss='mean_squared_error')
         return model
 
-    def save_model(self, f="my_model.pkl"):
-        with open(f, 'wb') as model_file:
-            pickle.dump(self.model, model_file)
+    def save_model(self, f="lstm_model.h5"):  # Updated file extension to .h5
+        self.model.save(f)

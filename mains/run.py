@@ -16,22 +16,18 @@ def main():
         scaled_data = data_processor.preprocess_data(data)
         X, y, scaler = data_processor.prepare_train_data(scaled_data)
 
-        # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
         lstm_model = LSTMModel(cfg)
         lstm_train = LSTMTrain(lstm_model.model, X_train, y_train, cfg)
         lstm_train.train()
 
-        # Save the model
-        lstm_model.save_model("lstm_model.pkl")
+        lstm_model.save_model("lstm_model.h5")  # Updated file extension to .h5
 
-        # Predicting the test set
         predictions = lstm_model.model.predict(X_test)
         predictions = scaler.inverse_transform(predictions)
 
-        # Plotting part assumes you're plotting test predictions with corresponding times
-        train_len = len(X_train)  # Adjust index if you're plotting on full dataset
+        train_len = len(X_train)
         actual = scaler.inverse_transform(y_test.reshape(-1, 1))
 
         plt.figure(figsize=(16, 8))
