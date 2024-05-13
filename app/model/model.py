@@ -1,11 +1,12 @@
-import pickle
-from typing import List
-
-__version__ = "0.1.0"
-
-with open(f"trained_pipeline-{__version__}.pkl", "rb") as f:
-    model = pickle.load(f)
+import tensorflow as tf
 
 
-def predict(text: str) -> List[float]:
-    return model.predict([text])
+class ModelLoader:
+    def __init__(self, model_path: str):
+        self.model = tf.keras.models.load_model(model_path)
+
+    def predict(self, data):
+        # Assuming data is in the same format as input to your LSTM model
+        # You may need to preprocess the data accordingly
+        predictions = self.model.predict(data)
+        return predictions
