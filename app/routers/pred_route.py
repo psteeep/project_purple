@@ -22,9 +22,11 @@ def preprocess_data(close_time, close_prices):
 router = APIRouter()
 
 # Initialize the model loader with the path to your saved LSTM model
-model_loader = ModelLoader("mains/lstm_model.h5")
+model_loader = ModelLoader("ml_model/mains/lstm_model.h5")
 
 logger = logging.getLogger(__name__)
+
+
 @router.post("/predict", response_model=PredictionResponse)
 def predict_route(data: PredictionData):
     try:
