@@ -14,7 +14,7 @@ This project aims to predict financial time series using LSTM neural networks. I
 You can also run the project using Docker. First, build the Docker image:
 
 ```bash
-docker build -t bitcoin-prediction .
+docker build -t financial-prediction .
 ```
 than run
 ```
